@@ -4,9 +4,9 @@
  
  ## Commands
  Currently there are 2 commands:
- **/findp \[player\]** - This will return a player's coordinates, this works without a database for players who are
+ \n**/findp \[player\]** - This will return a player's coordinates, this works without a database for players who are
  currently in-game. With a database it can also return an offline player's coordinates.
- **/findplist** - Returns a list of all players who have joined the game since the plugin was added to the server.
+ \n**/findplist** - Returns a list of all players who have joined the game since the plugin was added to the server.
  
  ## Permissions
  - FindPlayer.findp
