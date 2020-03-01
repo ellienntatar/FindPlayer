@@ -12,7 +12,7 @@
  - FindPlayer.findp
  - FindPlayer.findplist
  
- If you have any ideas for additional commands feel free to send me an email at ellienntatar@outlook.com
+ If you have any ideas for additional commands or you've found a bug feel free to send me an email at ellienntatar@outlook.com
  
  Thank you!
  
