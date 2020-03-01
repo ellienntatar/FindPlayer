@@ -8,3 +8,8 @@ commands:
          usage: /findp [player]
          permission: FindPlayer.findp
          permission-message: You don't have access to FindPlayer.findp!
+   findplist:
+         description: This command returns a list of all players who have joined the server. (a database must have been set up for this command to work.)
+         usage: /findplist
+         permission: FindPlayer.findplist
+         permission-message: You don't have access to FindPlayer.findplist!

@@ -101,6 +101,22 @@ public class FindPlayer extends JavaPlugin implements Listener {
             		sender.sendMessage(ChatColor.RED + "Error! No player name entered, did you forget to type something?");
             	}
             
+            } else if(cmd.getName().equalsIgnoreCase("findplist")) {
+            	if(statement != null) {
+            		try {
+            			ResultSet set = statement.executeQuery("SELECT playerName FROM playerLocations ORDER BY playerName");
+            			String res = ChatColor.UNDERLINE + "List of all players who have joined the server before:\n" + ChatColor.RESET + " \n";
+            			int i = 0;
+            			while(set.next()) {
+            				res += ChatColor.LIGHT_PURPLE + "" + ++i + ". " + ChatColor.GOLD + set.getString("playerName") + "\n";
+            			}
+            			sender.sendMessage(res);
+            		} catch (SQLException e) {
+            			e.printStackTrace();
+            		}
+            	} else {
+					sender.sendMessage(ChatColor.RED + "Error! No connection to database made, did you input the right values in the config file?");
+            	}
             }
     	return true; 
     }
