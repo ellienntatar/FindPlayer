@@ -48,7 +48,8 @@ public class FindPlayer extends JavaPlugin implements Listener {
 	        statement = connection.createStatement();
 	        statement.execute("CREATE TABLE IF NOT EXISTS playerLocations ("
 	        		+ "playerName VARCHAR(255) PRIMARY KEY,"
-	        		+ "playerLocation VARCHAR(255)"
+	        		+ "playerLocation VARCHAR(255),"
+	        		+ "playerWorld VARCHAR(255)"
 	        		+ ");");
 	    } catch (ClassNotFoundException e) {
 	        e.printStackTrace();
@@ -76,16 +77,17 @@ public class FindPlayer extends JavaPlugin implements Listener {
             		//if the player searched for is in game
 	    			if(p != null) {
 	    				Location l = p.getLocation(); 
-	    				sender.sendMessage(ChatColor.AQUA + "Player "+ ChatColor.BLUE + "\""+  p.getName()  + "\""+ ChatColor.AQUA + " coordinates are: "+ ChatColor.BLUE + l.getBlockX() + ", "+ l.getBlockY() + ", " + l.getBlockZ());
+	    				String world = switchWorld(p.getWorld().getName());
+	    				sender.sendMessage(ChatColor.AQUA + "Player "+ ChatColor.BLUE + "\""+  p.getName()  + "\""+ ChatColor.AQUA + " coordinates are: "+ ChatColor.BLUE + l.getBlockX() + ", "+ l.getBlockY() + ", " + l.getBlockZ()  + " \n(in: "+world+ ChatColor.BLUE + ")");
 	    				return true;
 	    			//player searched for is not in game, must search the database
 	    			} else {
 	    				if(statement != null) {
 	    					try {
-		    					ResultSet set = statement.executeQuery("SELECT playerLocation FROM playerLocations WHERE playerName = '"+args[0]+"'");
+		    					ResultSet set = statement.executeQuery("SELECT playerLocation, playerWorld FROM playerLocations WHERE playerName = '"+args[0]+"'");
 		    					boolean b = set.next();
 		    					if(b) {
-		    						sender.sendMessage(ChatColor.AQUA +"Player " + ChatColor.BLUE + "\""+  args[0]  + "\"" + ChatColor.AQUA + " last coordinates are: "+ ChatColor.BLUE + set.getString("playerLocation"));
+		    						sender.sendMessage(ChatColor.AQUA +"Player " + ChatColor.BLUE + "\""+  args[0]  + "\"" + ChatColor.AQUA + " last coordinates are: "+ ChatColor.BLUE + set.getString("playerLocation")  + " \n(in: " +set.getString("playerWorld")+ ChatColor.BLUE + ")");
 		    						return true;
 		    					}else {
 		    						sender.sendMessage( ChatColor.RED + "Can't find a player by the name of "+ ChatColor.GOLD + "\"" + args[0] + "\"" + ChatColor.RED + " in the database, did you make a typo?");
@@ -123,16 +125,17 @@ public class FindPlayer extends JavaPlugin implements Listener {
 	
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event){
-	  Player player = event.getPlayer();
-	  Location loc = player.getLocation();
 	  if(statement != null) {
+		  Player player = event.getPlayer();
+		  Location loc = player.getLocation();
+		  String world = switchWorld(player.getWorld().getName());
 		  try {
 			  String s = loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ();
 			  //update insert statement
 			  statement.execute(
-					  "INSERT INTO playerLocations (playerName, playerLocation)"
-					  + "VALUES ('"+player.getName()+"', '"+s+"')"
-					  + "ON DUPLICATE KEY UPDATE playerLocation = '"+s+"'"
+					  "INSERT INTO playerLocations (playerName, playerLocation, playerWorld)"
+					  + "VALUES ('"+player.getName()+"', '"+s+"', '"+ world +"')"
+					  + "ON DUPLICATE KEY UPDATE playerLocation = '"+s+"', playerWorld = '" + world + "'"
 					  );
 			  logger.info("Player \""+player.getName()+"\" location inserted or updated.");
 		  } catch (SQLException e) {
@@ -142,6 +145,24 @@ public class FindPlayer extends JavaPlugin implements Listener {
 		  logger.info("Connection to database not made! Cannot store player's last location.");
 	  }
 	  
+	}
+	
+	public String switchWorld(String world) {
+		String s;
+		switch(world) {
+	  		case "world":
+	  			s = ChatColor.GREEN + "Overworld";
+	  			break;
+	  		case "world_nether":
+	  			s = ChatColor.RED + "Nether";
+	  			break;
+	  		case "world_the_end":
+	  			s = ChatColor.YELLOW + "End";
+	  			break;
+	  		default:
+	  			s = "ERROR";
+		}
+		return s;
 	}
 	
 	public void openConnection() throws SQLException, ClassNotFoundException {
