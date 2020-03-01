@@ -1,0 +1,10 @@
+name: FindPlayer
+main: dev.ellienntatar.findplayer.FindPlayer
+version: 1.14
+author: Ellienn Tatar
+commands:
+   findp:
+         description: This command returns a player's coordinates. If a database is specified in the plugin.yml file, this command will return an offline player's last coordinates.
+         usage: /findp [player]
+         permission: FindPlayer.findp
+         permission-message: You don't have access to FindPlayer.findp!

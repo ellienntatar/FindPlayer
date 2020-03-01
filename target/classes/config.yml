@@ -1,0 +1,5 @@
+#Here are the data values you must change to reflect your server's MYSQL database.
+host: ""
+database: ""
+username: ""
+password: ""
