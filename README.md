@@ -1,6 +1,6 @@
 # FindPlayer
  A Minecraft Bukkit/Spigot plugin that can locate a player's location. This plugin utilizes a MYSQL database to store
- player's locations after they've left a Minecraft server. You can set database credentials in the config.yml file
+ player's locations after they've left a Minecraft server. You can set database credentials in the config.yml file.
  
  ## Commands
  Currently there are 2 commands:
